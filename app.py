@@ -6,6 +6,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.JOURNAL])
+app.title = "IPL Analytics"
 
 server = app.server
 
@@ -28,11 +29,22 @@ bowler_types_of_graph = {
     'Wickets by over': py.wickets_by_over
 }
 
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("GitHub", "https://www.github.com/lakshyaag")),
+    ],
+    brand='IPL Analytics',
+    brand_href='#',
+    color='primary',
+    dark=True
+)
+
 body = dbc.Container(fluid=True, children=[
     dbc.Row([
         dbc.Col([
             html.H3(children='Dashboard of IPL Analytics', style={
                 'textAlign': 'center'}),
+            html.Br()
         ])
     ]),
 
