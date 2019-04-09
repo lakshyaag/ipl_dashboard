@@ -81,7 +81,7 @@ def plot_batsman_runs(batsman):
             title='Runs',
             showgrid=False,
         ),
-        dragmode="False"
+        dragmode=False
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -117,7 +117,7 @@ def distribution_of_runs(batsman):
             font=dict(size=20),
         ),
         hovermode='closest',
-        dragmode="False"
+        dragmode=False
     )
 
     figure = go.Figure(data, layout)
@@ -152,8 +152,8 @@ def plot_bowler_runs(bowler):
         yaxis=dict(
             title='Runs',
             showgrid=False,
-            dragmode="False"
-        )
+        ),
+        dragmode = False
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -195,8 +195,8 @@ def plot_economy_rate(bowler):
         yaxis=dict(
             title='Economy Rate',
             showgrid=False,
-            dragmode="False"
-        )
+        ),
+        dragmode=False
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -237,8 +237,8 @@ def wicket_data(bowler):
         yaxis=dict(
             title='Wickets',
             showgrid=False,
-            dragmode="False"
-        )
+        ),
+        dragmode=False
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -342,7 +342,7 @@ def most_runs_against_team(batsman):
             title="Runs",
             showgrid=False,
         ),
-        dragmode="False"
+        dragmode=False
     )
 
     figure = go.Figure(data, layout)
@@ -451,7 +451,7 @@ def wickets_by_over(bowler):
             title='Wickets',
             showgrid=False,
         ),
-        dragmode="False"
+        dragmode=False
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -516,7 +516,7 @@ def outcome_by_toss(toss_cond, toss_decision):
             tickfont=dict(size=12.5)
         ),
         hovermode='closest',
-        dragmode="False"
+        dragmode=False
     )
     fig = tools.make_subplots(rows=1, cols=2, subplot_titles=('Match won', 'Match lost'))
     fig.append_trace(trace1, 1, 1)
@@ -565,7 +565,7 @@ def batsman_v_bowler(batsman, bowler):
             title='Strike Rate',
             showgrid=False,
         ),
-        dragmode="False"
+        dragmode=False
     )
 
     figure = go.Figure(data, layout)

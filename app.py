@@ -31,23 +31,16 @@ bowler_types_of_graph = {
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("GitHub", "https://www.github.com/lakshyaag")),
+        dbc.NavItem(dbc.NavLink("GitHub", href="https://www.github.com/lakshyaag")),
     ],
     brand='IPL Analytics',
-    brand_href='#',
+    brand_href='https://ipldash.herokuapp.com',
     color='primary',
-    dark=True
+    dark=True,
+    fluid=True,
 )
 
 body = dbc.Container(fluid=True, children=[
-    dbc.Row([
-        dbc.Col([
-            html.H3(children='Dashboard of IPL Analytics', style={
-                'textAlign': 'center'}),
-            html.Br()
-        ])
-    ]),
-
     dbc.Row([
         dbc.Col(children=[
             html.Div([
@@ -100,7 +93,7 @@ body = dbc.Container(fluid=True, children=[
                 ),
             ])
         ], width=6),
-    ]),
+    ], className='mt-4'),
 
     dbc.Row(children=[
         dbc.Col(children=[
@@ -144,7 +137,7 @@ body = dbc.Container(fluid=True, children=[
                 )
             ], style={'textAlign': 'center'}),
         ], width=6),
-    ]),
+    ]   ),
 
     dbc.Row(children=[
         dbc.Col([
