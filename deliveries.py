@@ -153,7 +153,7 @@ def plot_bowler_runs(bowler):
             title='Runs',
             showgrid=False,
         ),
-        dragmode = False
+        dragmode=False
     )
 
     figure = go.Figure(data=data, layout=layout)

@@ -137,7 +137,7 @@ body = dbc.Container(fluid=True, children=[
                 )
             ], style={'textAlign': 'center'}),
         ], width=6),
-    ]   ),
+    ]),
 
     dbc.Row(children=[
         dbc.Col([
