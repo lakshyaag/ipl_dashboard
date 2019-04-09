@@ -155,7 +155,7 @@ body = dbc.Container(fluid=True, children=[
     ])
 ])
 
-app.layout = html.Div(children=[body])
+app.layout = html.Div(children=[navbar, body])
 
 
 @app.callback(
