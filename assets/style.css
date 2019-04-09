@@ -1,0 +1,15 @@
+.graph_fill {
+    width: inherit;
+    height: inherit
+}
+
+label {
+    color: #6c6e6e !important;
+    margin-bottom: 0 !important
+}
+
+body {
+    font-family: Product Sans, "Roboto", "Open Sans", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+    font-size: 1.05rem !important;
+
+}

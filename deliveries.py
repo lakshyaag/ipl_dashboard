@@ -75,13 +75,14 @@ def plot_batsman_runs(batsman):
             dtick=1,
             title='Season',
             showgrid=False,
-            linewidth=2
+            linewidth=2,
         ),
         yaxis=dict(
             title='Runs',
             showgrid=False,
         ),
-        dragmode=False
+        dragmode=False,
+        autosize=True,
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -147,13 +148,14 @@ def plot_bowler_runs(bowler):
             dtick=1,
             title='Season',
             showgrid=False,
-            linewidth=2
+            linewidth=2,
         ),
         yaxis=dict(
             title='Runs',
             showgrid=False,
         ),
-        dragmode=False
+        dragmode=False,
+        autosize=True,
     )
 
     figure = go.Figure(data=data, layout=layout)
@@ -242,6 +244,39 @@ def wicket_data(bowler):
     )
 
     figure = go.Figure(data=data, layout=layout)
+    return figure
+
+
+def most_wickets_against(bowler):
+    bowler_data = balls[balls.bowler == bowler]
+
+    most_wick = bowler_data.groupby('batsman')['dismissal_kind'].count().reset_index().sort_values(by='dismissal_kind',
+                                                                                                   ascending=False)
+
+    data = [go.Table(
+        header=dict(
+            values=['Batsman', 'No. of wickets'],
+            font=dict(
+                size=15,
+                color='white'
+            ),
+            fill=dict(color="#f44336")
+        ),
+        cells=dict(
+            values=[most_wick['batsman'], most_wick['dismissal_kind']],
+            height=25,
+            fill = dict(color="#ffcdd2")
+        )
+    )]
+
+    layout = go.Layout(
+        title=dict(
+            text="Wickets by {}".format(bowler),
+            font=dict(size=25)
+        )
+    )
+
+    figure = go.Figure(data, layout)
     return figure
 
 
@@ -516,7 +551,8 @@ def outcome_by_toss(toss_cond, toss_decision):
             tickfont=dict(size=12.5)
         ),
         hovermode='closest',
-        dragmode=False
+        dragmode=False,
+        autosize=True
     )
     fig = tools.make_subplots(rows=1, cols=2, subplot_titles=('Match won', 'Match lost'))
     fig.append_trace(trace1, 1, 1)
@@ -527,7 +563,7 @@ def outcome_by_toss(toss_cond, toss_decision):
     return fig
 
 
-def batsman_v_bowler(batsman, bowler):
+def strike_rate_batsman_bowler(batsman, bowler):
     faceoff = balls[(balls.batsman == batsman) & (balls.bowler == bowler)]
 
     strike_rate = faceoff.groupby('season').agg({'batsman_runs': sum, 'ball': len})[
@@ -565,8 +601,55 @@ def batsman_v_bowler(batsman, bowler):
             title='Strike Rate',
             showgrid=False,
         ),
-        dragmode=False
+        dragmode=False,
+        autosize=True
     )
 
     figure = go.Figure(data, layout)
     return figure
+
+
+def wickets_batsman_bowler(batsman, bowler):
+    faceoff = balls[(balls.batsman == batsman) & (balls.bowler == bowler)]
+
+    try:
+        how_out = faceoff.groupby(['season', 'dismissal_kind']).size().unstack().fillna(0)
+    except ValueError:
+        how_out = faceoff.groupby(['season', 'dismissal_kind']).fillna(0).reset_index()
+
+    data = []
+    for t in how_out.columns:
+        trace = go.Bar(
+            x=how_out.index,
+            y=how_out[t],
+            name=t.capitalize(),
+            text=t.capitalize(),
+        )
+
+        data.append(trace)
+
+    layout = go.Layout(
+        title=dict(
+            text="How {} takes wickets of {}".format(bowler, batsman),
+            font=dict(size=20)
+        ),
+        xaxis=dict(
+            dtick=1,
+            showgrid=False,
+            linewidth=2,
+            title='Season'
+        ),
+        yaxis=dict(
+            showgrid=False,
+            linewidth=2,
+            title='No. of wickets'
+        ),
+        dragmode=False,
+        autosize=True,
+        barmode='group',
+        hovermode='closest'
+    )
+
+    fig = go.Figure(data, layout)
+
+    return fig

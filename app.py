@@ -5,7 +5,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.JOURNAL])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.PULSE])
 app.title = "IPL Analytics"
 
 server = app.server
@@ -26,7 +26,13 @@ bowler_types_of_graph = {
     'Runs conceded per season': py.plot_bowler_runs,
     'Economy rate by season': py.plot_economy_rate,
     'Wickets by season': py.wicket_data,
-    'Wickets by over': py.wickets_by_over
+    'Wickets by over': py.wickets_by_over,
+    'No. of wickets by player': py.most_wickets_against
+}
+
+vs_types_of_graph = {
+    'Strike rate': py.strike_rate_batsman_bowler,
+    'Distribution of wickets': py.wickets_batsman_bowler
 }
 
 navbar = dbc.NavbarSimple(
@@ -40,112 +46,183 @@ navbar = dbc.NavbarSimple(
     fluid=True,
 )
 
-body = dbc.Container(fluid=True, children=[
-    dbc.Row([
-        dbc.Col(children=[
-            html.Div([
-                html.H5(children='Batsman Section', style={
-                    'textAlign': 'left'
-                }),
+batsman_section = dbc.Card(
+    dbc.CardBody([
+        html.Label(
+            "Graph",
+            htmlFor='graph_type_bat'
+        ),
+        dcc.Dropdown(
+            id='graph_type_bat',
+            options=[{'label': i, 'value': i} for i in batsman_types_of_graph.keys()],
+            placeholder='Select graph',
+            value="Runs per season"
+        ),
 
+        html.Label(
+            "Batsman",
+            htmlFor='batsman_name'
+        ),
+
+        dcc.Dropdown(
+            id='batsman_name',
+            options=[{'label': x, 'value': x} for x in batsman_names],
+            placeholder='Select batsman',
+            value='RG Sharma'
+        ),
+
+        dcc.Graph(
+            id='graph_bat',
+            className='graph_fill'
+        ),
+    ])
+)
+
+bowler_section = dbc.Card(
+    dbc.CardBody([
+        html.Label(
+            "Graph",
+            htmlFor='graph_type_bowl'
+        ),
+        dcc.Dropdown(
+            id='graph_type_bowl',
+            options=[{'label': i, 'value': i} for i in bowler_types_of_graph.keys()],
+            value='Runs conceded per season',
+            placeholder='Select graph'
+        ),
+        html.Label(
+            "Bowler",
+            htmlFor='bowler_name'
+        ),
+        dcc.Dropdown(
+            id='bowler_name',
+            options=[{'label': x, 'value': x} for x in bowler_names],
+            value='B Kumar',
+            placeholder='Select bowler'
+        ),
+
+        dcc.Graph(
+            id='graph_bowl',
+            className='graph_fill',
+            config={
+                'showTips': True
+            }
+        ),
+    ])
+)
+
+player_v_player_section = dbc.Card([
+    dbc.CardBody([
+        dbc.Row([
+            dbc.Col([
+                html.Label(
+                    "Graph",
+                    htmlFor='graph_vs_type'
+                ),
                 dcc.Dropdown(
-                    id='graph_type_bat',
-                    options=[{'label': i, 'value': i} for i in batsman_types_of_graph.keys()],
-                    placeholder='Select graph',
-                    value="Runs per season"
-                ),
-
-                dcc.Dropdown(
-                    id='batsman_name',
-                    options=[{'label': x, 'value': x} for x in batsman_names],
-                    placeholder='Select batsman',
-                    value='RG Sharma'
-                ),
-
-                dcc.Graph(
-                    id='graph_bat',
-                ),
-            ]),
-        ], width=6),
-
-        dbc.Col(children=[
-            html.Div([
-                html.H5('Bowler section'),
-
-                html.Div(children=[
-                    dcc.Dropdown(
-                        id='graph_type_bowl',
-                        options=[{'label': i, 'value': i} for i in bowler_types_of_graph.keys()],
-                        value='Runs conceded per season',
-                        placeholder='Select graph'
-                    ),
-
-                    dcc.Dropdown(
-                        id='bowler_name',
-                        options=[{'label': x, 'value': x} for x in bowler_names],
-                        value='B Kumar',
-                        placeholder='Select bowler'
-                    ),
-                ]),
-
-                dcc.Graph(
-                    id='graph_bowl',
+                    id='graph_vs_type',
+                    options=[{'label': i, 'value': i} for i in vs_types_of_graph.keys()],
+                    value='Strike rate',
+                    placeholder='Select type of graph'
                 ),
             ])
-        ], width=6),
-    ], className='mt-4'),
-
-    dbc.Row(children=[
-        dbc.Col(children=[
-            dcc.Graph(
-                id='batsman_v_bowler',
-            )
-        ])
-    ]),
-
-    dbc.Row(children=[
-        dbc.Col(children=[
-            html.H4('Outcomes based on Toss'),
         ]),
-    ]),
 
-    dbc.Row([
-        dbc.Col([
-            html.Span(children=[
-                html.H6('Toss Outcome'),
-                dcc.RadioItems(
-                    id='toss_cond',
-                    options=[
-                        {'label': "Win", "value": 'win'},
-                        {'label': "Lose", "value": 'lose'}
-                    ],
-                    value='win',
+        dbc.Row([
+            dbc.Col([
+                html.Label(
+                    'Batsman',
+                    htmlFor='batsman_vs'
+                ),
+                dcc.Dropdown(
+                    id='batsman_vs',
+                    options=[{'label': i, 'value': i} for i in batsman_names],
+                    value='RG Sharma',
+                    placeholder='Select batsman',
+                ),
+            ], width=6),
+            dbc.Col([
+                html.Label(
+                    'Bowler',
+                    htmlFor='bowler_vs'
+                ),
+                dcc.Dropdown(
+                    id='bowler_vs',
+                    options=[{'label': i, 'value': i} for i in bowler_names],
+                    value='B Kumar',
+                    placeholder='Select bowler'
+                ),
+            ], width=6),
+        ]),
+
+        dcc.Graph(
+            id='batsman_v_bowler',
+            className='graph_fill'
+        )
+    ])
+])
+
+toss_section = dbc.Card([
+    dbc.CardBody([
+        dbc.Row([
+            dbc.Col([
+                html.Span(children=[
+                    html.H5('Toss Outcome'),
+                    dbc.RadioItems(
+                        id='toss_cond',
+                        options=[
+                            {'label': "Win", "value": 'win'},
+                            {'label': "Lose", "value": 'lose'}
+                        ],
+                        value='win',
+                        labelStyle={'display': 'inline-block'}
+                    )
+                ], style={'textAlign': 'center'}),
+            ], width=6),
+
+            dbc.Col(children=[
+                html.Span(children=[
+                    html.H5('Toss Decision'),
+                    dbc.RadioItems(
+                        id='toss_decision',
+                        options=[
+                            {'label': "Bat", "value": 'bat'},
+                            {'label': "Field", "value": 'field'}
+                        ],
+                        value='bat',
+                    )
+                ], style={'textAlign': 'center'}),
+            ], width=6),
+        ]),
+
+        dbc.Row(children=[
+            dbc.Col([
+                dcc.Graph(
+                    id='toss_graph',
+                    className='graph_fill'
                 )
-            ], style={'textAlign': 'center'}),
-        ], width=6),
-
-        dbc.Col(children=[
-            html.Span(children=[
-                html.H6('Toss Decision'),
-                dcc.RadioItems(
-                    id='toss_decision',
-                    options=[
-                        {'label': "Bat", "value": 'bat'},
-                        {'label': "Field", "value": 'field'}
-                    ],
-                    value='bat',
-                )
-            ], style={'textAlign': 'center'}),
-        ], width=6),
-    ]),
-
-    dbc.Row(children=[
-        dbc.Col([
-            dcc.Graph(
-                id='toss_graph'
-            )
+            ])
         ])
     ])
+])
+
+tabs = dbc.Tabs(
+    [
+        dbc.Tab(batsman_section, label="Batsman", tab_id='batsman_tab', labelClassName='text-dark'),
+        dbc.Tab(bowler_section, label="Bowler", tab_id='bowler_tab', labelClassName='text-dark'),
+        dbc.Tab(player_v_player_section, label='Player vs. Player', tab_id='player_v_player_tab',
+                labelClassName='text-dark'),
+        dbc.Tab(toss_section, label='Toss Analysis', tab_id='toss_tab', labelClassName='text-dark')
+    ],
+    active_tab='batsman_tab',
+    id='tabs')
+
+body = dbc.Container(fluid=True, children=[
+    dbc.Row([
+        dbc.Col([
+            tabs
+        ])
+    ], className='mt-4'),
 ])
 
 app.layout = html.Div(children=[navbar, body])
@@ -154,36 +231,41 @@ app.layout = html.Div(children=[navbar, body])
 @app.callback(
     Output(component_id='graph_bat', component_property='figure'),
     [Input(component_id='graph_type_bat', component_property='value'),
-     Input(component_id='batsman_name', component_property='value')]
+     Input(component_id='batsman_name', component_property='value'),
+     Input('tabs', 'active_tab')]
 )
-def update_graph(type_graph="Runs per season", name=""):
+def update_batsman_graph(type_graph, name, t):
     return batsman_types_of_graph[type_graph](name)
-
-
-@app.callback(
-    Output(component_id='batsman_v_bowler', component_property='figure'),
-    [Input(component_id='batsman_name', component_property='value'),
-     Input(component_id='bowler_name', component_property='value')]
-)
-def batsman_v_bowler_graph(batsman_name, bowler_name):
-    return py.batsman_v_bowler(batsman_name, bowler_name)
 
 
 @app.callback(
     Output(component_id='graph_bowl', component_property='figure'),
     [Input(component_id='graph_type_bowl', component_property='value'),
-     Input(component_id='bowler_name', component_property='value')]
+     Input(component_id='bowler_name', component_property='value'),
+     Input('tabs', 'active_tab')]
 )
-def update_graph(type_graph="Runs per season", name=""):
+def update_bowler_graph(type_graph, name, t):
     return bowler_types_of_graph[type_graph](name)
+
+
+@app.callback(
+    Output(component_id='batsman_v_bowler', component_property='figure'),
+    [Input(component_id='graph_vs_type', component_property='value'),
+     Input(component_id='batsman_vs', component_property='value'),
+     Input(component_id='bowler_vs', component_property='value'),
+     Input('tabs', 'active_tab')]
+)
+def batsman_v_bowler_graph(type_graph, batsman_name, bowler_name, t):
+    return vs_types_of_graph[type_graph](batsman_name, bowler_name)
 
 
 @app.callback(
     Output(component_id='toss_graph', component_property='figure'),
     [Input(component_id='toss_cond', component_property='value'),
-     Input(component_id='toss_decision', component_property='value')]
+     Input(component_id='toss_decision', component_property='value'),
+     Input('tabs', 'active_tab')]
 )
-def update_toss_graph(toss_cond, toss_decision):
+def update_toss_graph(toss_cond, toss_decision, t):
     return py.outcome_by_toss(toss_cond, toss_decision)
 
 
