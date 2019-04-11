@@ -3,9 +3,10 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.PULSE])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.PULSE],
+                meta_tags=[{'name': 'viewport', 'content': "width=device-width, initial-scale=1"}])
 app.title = "IPL Analytics"
 
 server = app.server
@@ -37,7 +38,8 @@ vs_types_of_graph = {
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("GitHub", href="https://www.github.com/lakshyaag")),
+        dbc.NavItem(dbc.NavLink("GitHub", href="https://www.github.com/lakshyaag", active=True)),
+        dbc.NavItem(dbc.NavLink("Made by Lakshya Agarwal", href="#")),
     ],
     brand='IPL Analytics',
     brand_href='https://ipldash.herokuapp.com',
@@ -45,6 +47,45 @@ navbar = dbc.NavbarSimple(
     dark=True,
     fluid=True,
 )
+
+header = dbc.Row([
+    dbc.Col([
+        html.H2('Indian Premier League'),
+        html.P('''
+        The Indian Premier League is a professional Twenty20 cricket league in India contested during March or April and 
+        May of every year by eight teams representing eight different cities in India.
+        '''),
+
+        html.Div(
+            [
+                dbc.Button("Teams playing", id='teams-playing', className='mb-2'),
+                dbc.Collapse(
+                    dbc.ListGroup(
+                        [
+                            dbc.ListGroupItem('Chennai Super Kings'),
+                            dbc.ListGroupItem('Mumbai Indians'),
+                            dbc.ListGroupItem('Kolkata Knight Riders'),
+                            dbc.ListGroupItem('Royal Challengers Bangalore'),
+                            dbc.ListGroupItem('Kings XI Punjab'),
+                            dbc.ListGroupItem('Sunrisers Hyderabad'),
+                            dbc.ListGroupItem('Rajasthan Royals'),
+                            dbc.ListGroupItem('Delhi Capitals'),
+                        ]
+                    ),
+                    id='collapse'
+                )
+            ]
+        )
+    ], width=6),
+    dbc.Col([
+        html.H2('Analytics Dashboard'),
+        html.P('''
+        An interactive analytics dashboard for IPL which contains data from all seasons till 2018. 
+        '''),
+        html.P('''
+        You can analyze runs scored, dismissals, strike rates by player, toss statistics and other insights.''')
+    ], width=6),
+], className='mt-4')
 
 batsman_section = dbc.Card(
     dbc.CardBody([
@@ -218,6 +259,7 @@ tabs = dbc.Tabs(
     id='tabs')
 
 body = dbc.Container(fluid=True, children=[
+    header,
     dbc.Row([
         dbc.Col([
             tabs
@@ -267,6 +309,17 @@ def batsman_v_bowler_graph(type_graph, batsman_name, bowler_name, t):
 )
 def update_toss_graph(toss_cond, toss_decision, t):
     return py.outcome_by_toss(toss_cond, toss_decision)
+
+
+@app.callback(
+    Output('collapse', 'is_open'),
+    [Input('teams-playing', 'n_clicks')],
+    [State('collapse', 'is_open')]
+)
+def toggle_collapse(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 
 if __name__ == '__main__':
