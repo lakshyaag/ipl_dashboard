@@ -13,3 +13,7 @@ body {
     font-size: 1.05rem !important;
 
 }
+
+._dash-undo-redo {
+display: none;
+}

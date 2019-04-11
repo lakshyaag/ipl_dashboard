@@ -38,14 +38,15 @@ vs_types_of_graph = {
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("GitHub", href="https://www.github.com/lakshyaag", active=True)),
-        dbc.NavItem(dbc.NavLink("Made by Lakshya Agarwal", href="#")),
+        dbc.NavItem(dbc.NavLink("GitHub", href="https://www.github.com/lakshyaag")),
+        dbc.NavItem(dbc.NavLink("Made by Lakshya Agarwal", href="https://www.linkedin.com/in/lakshyaag/", active=True)),
     ],
     brand='IPL Analytics',
     brand_href='https://ipldash.herokuapp.com',
     color='primary',
     dark=True,
     fluid=True,
+    sticky='top'
 )
 
 header = dbc.Row([
@@ -55,35 +56,32 @@ header = dbc.Row([
         The Indian Premier League is a professional Twenty20 cricket league in India contested during March or April and 
         May of every year by eight teams representing eight different cities in India.
         '''),
-
-        html.Div(
-            [
-                dbc.Button("Teams playing", id='teams-playing', className='mb-2'),
-                dbc.Collapse(
-                    dbc.ListGroup(
-                        [
-                            dbc.ListGroupItem('Chennai Super Kings'),
-                            dbc.ListGroupItem('Mumbai Indians'),
-                            dbc.ListGroupItem('Kolkata Knight Riders'),
-                            dbc.ListGroupItem('Royal Challengers Bangalore'),
-                            dbc.ListGroupItem('Kings XI Punjab'),
-                            dbc.ListGroupItem('Sunrisers Hyderabad'),
-                            dbc.ListGroupItem('Rajasthan Royals'),
-                            dbc.ListGroupItem('Delhi Capitals'),
-                        ]
-                    ),
-                    id='collapse'
-                )
-            ]
-        )
+        dbc.Button("Teams playing", id='teams-playing', className='mb-2'),
     ], width=6),
+
     dbc.Col([
         html.H2('Analytics Dashboard'),
         html.P('''
         An interactive analytics dashboard for IPL which contains data from all seasons till 2018. 
         '''),
         html.P('''
-        You can analyze runs scored, dismissals, strike rates by player, toss statistics and other insights.''')
+        You can analyze runs scored, dismissals, strike rates by player, toss statistics and other insights. 
+        I'm working on adding additional insights. If you have any ideas, drop me a message.'''),
+        dbc.Collapse(
+            dbc.ListGroup(
+                [
+                    dbc.ListGroupItem('Chennai Super Kings'),
+                    dbc.ListGroupItem('Mumbai Indians'),
+                    dbc.ListGroupItem('Kolkata Knight Riders'),
+                    dbc.ListGroupItem('Royal Challengers Bangalore'),
+                    dbc.ListGroupItem('Kings XI Punjab'),
+                    dbc.ListGroupItem('Sunrisers Hyderabad'),
+                    dbc.ListGroupItem('Rajasthan Royals'),
+                    dbc.ListGroupItem('Delhi Capitals'),
+                ]
+            ),
+            id='collapse'
+        )
     ], width=6),
 ], className='mt-4')
 
@@ -109,12 +107,16 @@ batsman_section = dbc.Card(
             id='batsman_name',
             options=[{'label': x, 'value': x} for x in batsman_names],
             placeholder='Select batsman',
-            value='RG Sharma'
+            value='V Kohli'
         ),
 
         dcc.Graph(
             id='graph_bat',
-            className='graph_fill'
+            className='graph_fill',
+            config={
+                'showTips': True,
+                'displayModeBar': False
+            }
         ),
     ])
 )
@@ -138,7 +140,7 @@ bowler_section = dbc.Card(
         dcc.Dropdown(
             id='bowler_name',
             options=[{'label': x, 'value': x} for x in bowler_names],
-            value='B Kumar',
+            value='JJ Bumrah',
             placeholder='Select bowler'
         ),
 
@@ -146,8 +148,10 @@ bowler_section = dbc.Card(
             id='graph_bowl',
             className='graph_fill',
             config={
-                'showTips': True
-            }
+                'showTips': True,
+                'displayModeBar': False
+            },
+
         ),
     ])
 )
@@ -178,7 +182,7 @@ player_v_player_section = dbc.Card([
                 dcc.Dropdown(
                     id='batsman_vs',
                     options=[{'label': i, 'value': i} for i in batsman_names],
-                    value='RG Sharma',
+                    value='V Kohli',
                     placeholder='Select batsman',
                 ),
             ], width=6),
@@ -190,7 +194,7 @@ player_v_player_section = dbc.Card([
                 dcc.Dropdown(
                     id='bowler_vs',
                     options=[{'label': i, 'value': i} for i in bowler_names],
-                    value='B Kumar',
+                    value='Harbhajan Singh',
                     placeholder='Select bowler'
                 ),
             ], width=6),
@@ -198,7 +202,11 @@ player_v_player_section = dbc.Card([
 
         dcc.Graph(
             id='batsman_v_bowler',
-            className='graph_fill'
+            className='graph_fill',
+            config={
+                'showTips': True,
+                'displayModeBar': False
+            }
         )
     ])
 ])
@@ -240,7 +248,11 @@ toss_section = dbc.Card([
             dbc.Col([
                 dcc.Graph(
                     id='toss_graph',
-                    className='graph_fill'
+                    className='graph_fill',
+                    config={
+                        'showTips': True,
+                        'displayModeBar': False
+                    }
                 )
             ])
         ])
@@ -323,4 +335,4 @@ def toggle_collapse(n, is_open):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
