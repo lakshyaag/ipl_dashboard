@@ -1,3 +1,4 @@
+
 # IPL Analytics Dashboard
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](#)
 
@@ -17,9 +18,11 @@
 
  - [ ] Player by Player comparison
  - [ ] Season statistics
+ - [ ] Head-to-head details
  - [ ] List top players by area (i.e., batting, bowling, etc.)
  - [ ] Improve the performance
  - [ ] Improve the UI
+
  
 ### Data
 Ball-by-ball data and match data has been taken from [Kaggle](https://www.kaggle.com/manasgarg/ipl) and preprocessed locally.
