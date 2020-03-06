@@ -62,7 +62,7 @@ header = dbc.Row([
     dbc.Col([
         html.H2('Analytics Dashboard'),
         html.P('''
-        An interactive analytics dashboard for IPL which contains data from all seasons till 2018. 
+        An interactive analytics dashboard for IPL which contains data from all seasons till 2019. 
         '''),
         html.P('''
         You can analyze runs scored, dismissals, strike rates by player, toss statistics and other insights. 

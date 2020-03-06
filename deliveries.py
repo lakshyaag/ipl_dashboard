@@ -4,7 +4,7 @@ import plotly.graph_objs as go
 from plotly import tools
 
 balls = pd.read_csv('deliveries.csv')
-matches = pd.read_csv('matches.csv').drop('umpire3', axis=1)
+matches = pd.read_csv('matches.csv')
 
 balls = balls.merge(matches, left_on='match_id', right_on='id')
 

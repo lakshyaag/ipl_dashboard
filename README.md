@@ -2,11 +2,12 @@
 # IPL Analytics Dashboard
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](#)
 
-**A dashboard (web-app) for visualizing the [Indian Premier League (IPL)](http://www.iplt20.com/) over the past decade (2008-2018).**
+**A dashboard (web-app) for visualizing the [Indian Premier League (IPL)](http://www.iplt20.com/) over the past decade (2008-2019).**
 
 ## The dashboard is live [here.](https://ipldash.herokuapp.com)
 [![forthebadge](https://forthebadge.com/images/badges/check-it-out.svg)](https://ipldash.herokuapp.com)
 
+## Updated data for IPL 2019!
 
 ## Frameworks / Tools Used
 1. [Dash](https://dash.plot.ly/) - for creating the front-end
